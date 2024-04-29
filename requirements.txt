@@ -38,8 +38,8 @@ six==1.16.0
 sniffio==1.3.1
 storage3==0.7.4
 StrEnum==0.4.15
-supabase==2.4.3
-supabase-py==0.0.2
+supabase
+supabase-py
 supafunc==0.4.5
 toml==0.10.2
 typing_extensions==4.11.0
