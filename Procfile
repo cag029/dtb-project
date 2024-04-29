@@ -1,1 +1,1 @@
-﻿web:gunicorn app:supabase_handler.py
+web: gunicorn supabase_handler:app
