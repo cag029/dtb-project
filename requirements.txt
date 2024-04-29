@@ -4,7 +4,7 @@ atomicwrites==1.4.1
 attrs==23.2.0
 blinker==1.7.0
 certifi==2024.2.2
-chardet==4.0.0
+chardet
 click==8.1.7
 colorama==0.4.6
 dataclasses==0.6
