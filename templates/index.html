@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSCE 4523 Project</title>
+
+    <!-- webpage styling -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .form-container {
+            display: none;
+        }
+        .active {
+            display: block;
+        }
+        button {
+            margin: 10px 0;
+            padding: 10px 20px;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<h1>Football Database Manager</h1> <br><br>
+
+<!-- main menu buttons -->
+<div>
+    <h3> Functions that interact with multiple tables in the database </h3>
+    <button onclick="showForm('gamesForm')">Show All Games for a Team</button>
+    <button onclick="showForm('positionForm')">Show All Players of a Specific Position</button>
+    <button onclick="showForm('teamMembersForm')">Show All Members of a Team</button>
+    <button onclick="showForm('viewGamesByDateForm')">View All Game Results on a Date</button>
+    <button onclick="viewAllTeams()">View All Teams by Conference</button>
+    <br>
+    <br>
+    <h3> Functions to add, modify, or remove data from the database </h3>
+    <button onclick="showForm('addDataForm')">Add Data</button>
+    <button onclick="showForm('changePlayerTeamForm')">Change Players Team</button>
+    <button onclick="showForm('deleteDataForm')">Delete Data</button>
+    <br><br><br>
+</div>
+
+<!-- forms -->
+<div id="viewGamesByDateForm" class="form-container">
+    <h2>View Results on Date</h2>
+    <form action="/games_by_date" method="post">
+        <label for="date">Enter Date:</label>
+        <input type="date" name="date">
+        <input type="submit" value="View Results">
+    </form>
+</div>
+
+<div id="changePlayerTeamForm" class="form-container">
+    <h2>Change Player's Team</h2>
+    <form action="/change_player_team" method="post">
+        <label for="playerID">Player ID:</label>
+        <input type="text" name="playerID">
+        <label for="newTeamID">New Team ID:</label>
+        <input type="text" name="newTeamID">
+        <input type="submit" value="Change Team">
+    </form>
+</div>
+
+<div id="gamesForm" class="form-container">
+    <h2>Show All Games for a Team</h2>
+    <form action="/games_for_team" method="post">
+        <label for="team_ID">Enter Team ID:</label>
+        <input type="text" name="team_ID">
+        <input type="submit" value="Show Games">
+    </form>
+</div>
+
+<div id="positionForm" class="form-container">
+    <h2>Show All Players of a Specific Position</h2>
+    <form action="/position_members" method="post">
+        <label for="position">Choose Position:</label>
+        <select name="position">
+            <option value="Quarterback">Quarterback</option>
+            <option value="Running Back">Running Back</option>
+            <option value="Wide Receiver">Wide Receiver</option>
+            <option value="Tight End">Tight End</option>
+            <option value="Offensive Lineman">Offensive Lineman</option>
+            <option value="Defensive Lineman">Defensive Lineman</option>
+            <option value="Linebacker">Linebacker</option>
+            <option value="Cornerback">Cornerback</option>
+            <option value="Safety">Safety</option>
+            <option value="Kicker">Kicker</option>
+            <option value="Punter">Punter</option>
+        </select> <input type="submit" value="Find players"><br><br>
+    </form>
+</div>
+
+<div id="teamMembersForm" class="form-container">
+    <h2>Show All Members of a Team</h2>
+    <form action="/team_members" method="post">
+        <label for="team_ID">Enter Team ID:</label>
+        <input type="text" name="team_ID">
+        <input type="submit" value="Get Team Members">
+    </form>
+    <div>
+        {% if team_members %}
+        <h2>Team Members:</h2>
+        <ul>
+            {% for member in team_members %}
+            <li>{{ member.player_name }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+</div>
+
+<div id="addDataForm" class="form-container">
+    <h2>Add Data</h2>
+    <form action="/add" method="post" id="addForm">
+        <label for="table">Select Table:</label>
+        <select name="table" id="table">
+            <option value="Player">Player</option>
+            <option value="Game">Game</option>
+            <option value="Team">Team</option>
+        </select><br><br>
+        <!-- player Fields -->
+        <div id="playerFields">
+            <label for="player_ID">Player ID:</label>
+            <input type="text" name="player_ID"><br>
+            <label for="team_ID">Team ID:</label>
+            <input type="text" name="team_ID"><br>
+            <label for="player_name">Player Name:</label>
+            <input type="text" name="player_name"><br>
+            <label for="player_position">Player Position:</label>
+            <select name="player_position">
+                <option value="Quarterback">Quarterback</option>
+                <option value="Running Back">Running Back</option>
+                <option value="Wide Receiver">Wide Receiver</option>
+                <option value="Tight End">Tight End</option>
+                <option value="Offensive Lineman">Offensive Lineman</option>
+                <option value="Defensive Lineman">Defensive Lineman</option>
+                <option value="Linebacker">Linebacker</option>
+                <option value="Cornerback">Cornerback</option>
+                <option value="Safety">Safety</option>
+                <option value="Kicker">Kicker</option>
+                <option value="Punter">Punter</option>
+            </select><br><br>
+        </div>
+        <!-- game Fields -->
+        <div id="gameFields" style="display: none;">
+            <label for="game_ID">Game ID:</label>
+            <input type="text" name="game_ID"><br>
+            <label for="team_one_ID">Team one ID:</label>
+            <input type="text" name="team_one_ID"><br>
+            <label for="team_two_ID">Team two ID:</label>
+            <input type="text" name="team_two_ID"><br>
+            <label for="team_one_score">Team one score:</label>
+            <input type="text" name="team_one_score"><br>
+            <label for="team_two_score">Team two score:</label>
+            <input type="text" name="team_two_score"><br>
+            <label for="date">Date:</label>
+            <input type="date" name="date"><br>
+        </div>
+        <!-- team Fields -->
+        <div id="teamFields" style="display: none;">
+            <label for="team_ID">Team ID:</label>
+            <input type="text" name="team_ID_input"><br>
+            <label for="location">Location:</label>
+            <input type="text" name="location"><br>
+            <label for="nickname">Nickname:</label>
+            <input type="text" name="nickname"><br>
+            <label for="conference">Conference:</label>
+            <select name="conference">
+                <option value="AFC">AFC</option>
+                <option value="NFC">NFC</option>
+            </select><br><br>
+            <label for="division">Division:</label>
+            <select name="division">
+                <option value="North">North</option>
+                <option value="South">South</option>
+                <option value="East">East</option>
+                <option value="West">West</option>
+            </select><br><br>
+        </div>
+        <input type="submit" value="Add Data">
+    </form>
+    <script>
+        document.getElementById('table').addEventListener('change', function() {
+            var selectedTable = this.value;
+            var playerFields = document.getElementById('playerFields');
+            var gameFields = document.getElementById('gameFields');
+            var teamFields = document.getElementById('teamFields');
+
+            // hide all fields
+            playerFields.style.display = 'none';
+            gameFields.style.display = 'none';
+            teamFields.style.display = 'none';
+
+            // show fields based on the selected table
+            if (selectedTable === 'Player') {
+                playerFields.style.display = 'block';
+            } else if (selectedTable === 'Game') {
+                gameFields.style.display = 'block';
+            } else if (selectedTable === 'Team') {
+                teamFields.style.display = 'block';
+            }
+        });
+    </script>
+</div>
+
+<div id="deleteDataForm" class="form-container">
+    <h2>Delete Data</h2>
+
+    <form id="deleteForm" method="post">
+        <label for="deleteType">Select Data Type:</label>
+        <select name="deleteType" id="deleteType">
+            <option value="player">Player</option>
+            <option value="game">Game</option>
+            <option value="team">Team</option>
+        </select><br><br>
+        <label for="ID">Enter ID to Delete:</label>
+        <input type="text" name="ID" id="ID" placeholder="Enter ID">
+        <input type="submit" value="Delete Data">
+    </form>
+    <script>
+        document.getElementById('deleteForm').addEventListener('submit', function(event) {
+            var deleteType = document.getElementById('deleteType').value;
+            var idInput = document.getElementById('ID');
+
+            // set input ID type based on selection
+            if (deleteType === 'player') {
+                this.action = '/delete_player';
+                idInput.setAttribute('name', 'playerID');
+                idInput.setAttribute('placeholder', 'Enter Player ID');
+            } else if (deleteType === 'game') {
+                this.action = '/delete_game';
+                idInput.setAttribute('name', 'gameID');
+                idInput.setAttribute('placeholder', 'Enter Game ID');
+            } else if (deleteType === 'team') {
+                this.action = '/delete_team';
+                idInput.setAttribute('name', 'teamID');
+                idInput.setAttribute('placeholder', 'Enter Team ID');
+            }
+        });
+    </script>
+</div>
+
+<!-- JS to show or hide forms -->
+<script>
+    function showForm(formId) {
+        var forms = document.querySelectorAll('.form-container');
+        forms.forEach(function(form) {
+            form.classList.remove('active');
+        });
+        document.getElementById(formId).classList.add('active');
+
+
+        if (formId === 'modifyDataForm') {
+            updateModifyFields();
+        }
+    }
+
+    function updateModifyFields() {
+        var modifyType = document.getElementById('modifyType').value;
+        var modifyAttributeDropdown = document.getElementById('modifyAttribute');
+
+        // clear options
+        modifyAttributeDropdown.innerHTML = '';
+
+        // show dropdown options based on selection
+        if (modifyType === 'player') {
+            populateDropdown(modifyAttributeDropdown, ['Team ID', 'Player Name', 'Player Position']);
+        } else if (modifyType === 'game') {
+            populateDropdown(modifyAttributeDropdown, ['Team One ID', 'Team Two ID', 'Team One Score', 'Team Two Score', 'Date']);
+        } else if (modifyType === 'team') {
+            populateDropdown(modifyAttributeDropdown, ['Location', 'Nickname', 'Conference', 'Division']);
+        }
+    }
+
+    function populateDropdown(dropdown, options) {
+        options.forEach(function(option) {
+            var optionElement = document.createElement('option');
+            optionElement.text = option;
+            dropdown.add(optionElement);
+        });
+    }
+
+    // eventlistener for changing dropdown
+    document.getElementById('modifyType').addEventListener('change', function() {
+        updateModifyFields();
+    });
+</script>
+
+<script>
+    // function to redirect to teams_by_conference page
+    function viewAllTeams() {
+        window.location.href = '/teams_by_conference';
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Results</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .winner {
+            font-weight: bold;
+            color: green;
+        }
+        tr.empty-row td {
+            border: none;
+        }
+    </style>
+</head>
+<body>
+<h1>Results for the Specified Date</h1>
+
+{% if games %}
+<table>
+    <thead>
+    <tr>
+        <th>Winner</th>
+        <th>Nickname</th>
+        <th>Location</th>
+        <th>Score</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for game in games %}
+    <tr>
+        {% if game.team_one_score > game.team_two_score %}
+        <td class="winner">{{ game.team_one_nickname }}</td>
+        {% elif game.team_one_score < game.team_two_score %}
+        <td class="winner">{{ game.team_two_nickname }}</td>
+        {% else %}
+        <td></td>
+        {% endif %}
+        <td>{{ game.team_one_nickname }}</td>
+        <td>{{ game.team_one_location }}</td>
+        <td>{{ game.team_one_score }}</td>
+    </tr>
+    <tr>
+        {% if game.team_one_score < game.team_two_score %}
+        <td class="winner">{{ game.team_two_nickname }}</td>
+        {% elif game.team_one_score > game.team_two_score %}
+        <td class="winner">{{ game.team_one_nickname }}</td>
+        {% else %}
+        <td></td>
+        {% endif %}
+        <td>{{ game.team_two_nickname }}</td>
+        <td>{{ game.team_two_location }}</td>
+        <td>{{ game.team_two_score }}</td>
+    </tr>
+    <tr class="empty-row"><td colspan="4"></td></tr>
+    <tr><td colspan="4"></td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>{{ message }}</p>
+{% endif %}
+</body>
+</html>

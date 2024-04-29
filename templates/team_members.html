@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Team Members</title>
+  <style>
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+<h1>Team Members</h1>
+{% if team_members is not none and team_members %}
+<h2>Team ID: {{ team_members[0]['team_ID'] }}</h2>
+<ul>
+  {% for member in team_members %}
+  <li>{{ member['player_name'] }} - {{ member['player_position'] }}</li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>{{ error_message }}</p>
+{% endif %}
+</body>
+</html>

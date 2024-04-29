@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Players of the Specified Position</title>
+    <style>
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+        hr {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            border: 0;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+<h1>Players of the Specified Position</h1>
+{% if position_members %}
+<ul>
+    {% for member in position_members %}
+    <li>
+        <p>Name: {{ member['player_name'] }}</p>
+        <p>ID: {{ member['player_ID'] }}</p>
+        <p>Team: {{ member['team_name'] }}</p>
+        <hr>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>{{ error_message }}</p>
+{% endif %}
+</body>
+</html>

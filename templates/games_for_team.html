@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Games Played by Team</title>
+  <style>
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+<h1>{{ team_name }} Games Played by Team</h1>
+
+{% if games %}
+<ul>
+  {% for game in games %}
+  <li>
+    <strong>Game ID:</strong> {{ game['game_ID'] }} <br>
+    <strong>Date:</strong> {{ game['date'] }} <br>
+    <strong>Opponent:</strong> (ID: {% if game['team_one_ID'] == team_ID %}{{ game['team_two_ID'] }}{% else %}{{ game['team_one_ID'] }}{% endif %}) <br>
+    <strong>Score:</strong>
+    {% if game['team_one_ID'] == team_ID %}
+    {{ game['team_one_score'] }} - {{ game['team_two_score'] }}
+    {% else %}
+    {{ game['team_two_score'] }} - {{ game['team_one_score'] }}
+    {% endif %} <br>
+    <strong>Result:</strong>
+    {% if game['team_one_ID'] == team_ID %}
+    {% if game['team_one_score'] > game['team_two_score'] %}
+    Won
+    {% elif game['team_one_score'] < game['team_two_score'] %}
+    Lost
+    {% else %}
+    Draw
+    {% endif %}
+    {% else %}
+    {% if game['team_two_score'] > game['team_one_score'] %}
+    Won
+    {% elif game['team_two_score'] < game['team_one_score'] %}
+    Lost
+    {% else %}
+    Draw
+    {% endif %}
+    {% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>No games found for the specified team.</p>
+{% endif %}
+</body>
+</html>

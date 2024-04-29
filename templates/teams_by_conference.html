@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teams by Conference</title>
+  <style>
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      padding: 10px;
+    }
+    hr {
+      margin-top: 10px;
+      margin-bottom: 10px;
+      border: 0;
+      border-top: 1px solid #ddd;
+    }
+  </style>
+</head>
+<body>
+<h1>Teams by Conference</h1>
+{% if error_message %}
+<p>{{ error_message }}</p>
+{% else %}
+<h2>AFC Teams</h2>
+<ul>
+  {% for team in afc_teams %}
+  <li>
+    <p>Team Name: {{ team['nickname'] }}</p>
+    <p>Team ID: {{ team['team_ID'] }}</p>
+    <p>Location: {{ team['location'] }}</p>
+    <p>Division: {{ team['division'] }}</p>
+    <p>Number of Wins: {{ team.wins }}</p>
+    <hr>
+  </li>
+  {% endfor %}
+</ul>
+
+<h2>NFC Teams</h2>
+<ul>
+  {% for team in nfc_teams %}
+  <li>
+    <p>Team Name: {{ team['nickname'] }}</p>
+    <p>Team ID: {{ team['team_ID'] }}</p>
+    <p>Location: {{ team['location'] }}</p>
+    <p>Division: {{ team['division'] }}</p>
+    <p>Number of Wins: {{ team.wins }}</p>
+    <hr>
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+</body>
+</html>
